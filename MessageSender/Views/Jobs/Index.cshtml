@@ -1,0 +1,23 @@
+﻿@model JobList<ProcessingJobDto>
+@using Hangfire.Storage.Monitoring;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Running Jobs</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10" data-bind="foreach: jobs">
+            <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-info" data-bind="style: { width: progressPercentage() }" role="progressbar" aria-valuemin="0" aria-valuemax="100" >
+                    <span data-bind="text: progressPercentage()"></span> Complete
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
