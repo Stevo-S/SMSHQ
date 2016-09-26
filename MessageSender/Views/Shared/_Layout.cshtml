@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Message Sender</title>
+    <title>@ViewBag.Title - SMSHQ</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -17,23 +17,106 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Message Sender", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("SMSHQ", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Subscribers", "Index", "Subscribers")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Messaging
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Send To Subscribers", "Create", "BatchMessages")</li>
+                            <li>@Html.ActionLink("View Inbound Messages", "Index", "InboundMessages")</li>
+                            <li>@Html.ActionLink("View Outbound Messages", "Index", "OutboundMessages")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Short Codes
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Codes", "Index", "ShortCodes")</li>
+                            <li>@Html.ActionLink("Services", "Index", "Services")</li>
+                        </ul>
+                    </li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
+
+    <div class="jumbotron" style="padding: 2px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" style="color: orangered">
+                    <h2>@ViewBag.Title</h2>
+                </div>
+                <div class="col-md-6">
+                    <img src="@Url.Content("~/Content/Images/smshq_logo.png")" alt="Barefoot Power Logo" width="200" height="80" class="pull-right" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Notifications -->
+        @if (TempData["SuccessNotifications"] != null)
+        {
+            foreach (var item in (List<string>)TempData["SuccessNotifications"])
+            {
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>@item</strong>
+                </div>
+            }
+        }
+
+        @if (ViewBag.InfoNotifications != null)
+        {
+            foreach (var item in ViewBag.InfoNotifications)
+            {
+                <div class="alert alert-info alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>@item</strong>
+                </div>
+            }
+        }
+
+        @if (ViewBag.WarningNotifications != null)
+        {
+            foreach (var item in ViewBag.WarningNotifications)
+            {
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>@item</strong>
+                </div>
+            }
+        }
+
+        @if (ViewBag.ErrorNotifications != null)
+        {
+            foreach (var item in ViewBag.ErrorNotifications)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>@item</strong>
+                </div>
+            }
+        }
+
+    </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Message Sender</p>
+            <p>&copy; @DateTime.Now.Year - SMSHQ</p>
         </footer>
     </div>
 
@@ -42,7 +125,6 @@
     @Scripts.Render("~/bundles/knockoutjs")
     @Scripts.Render("~/bundles/signalr")
     <script src="~/signalr/hubs"></script>
-    @Scripts.Render("~/bundles/custom")
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Import";
+}
+
+<h2>Import Subscribers</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="subscribersFile" class="control-label col-md-2">File: </label>
+        <div class="col-md-4">
+            <input type="file" name="subscribersFile" id="subscribersFile" accept=".xlsx" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Import" class="btn btn-default" />
+        </div>
+    </div>
+}
+

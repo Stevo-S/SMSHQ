@@ -10,6 +10,7 @@ using MessageSender.Models;
 using OfficeOpenXml;
 using Hangfire;
 using MessageSender.Jobs;
+using EntityFramework.BulkInsert.Extensions;
 
 namespace MessageSender.Controllers
 {
@@ -41,6 +42,10 @@ namespace MessageSender.Controllers
         // GET: BatchMessages/Create
         public ActionResult Create()
         {
+            var services = db.Services.Include(s => s.ShortCode);
+            ViewBag.Services = db.Services.Select(s => new { Name = s.Name, ServiceId = s.ServiceId }).ToArray();
+            //ViewBag.Services = new SelectList(services, "ServiceId", "Name");
+            ViewBag.ShortCodes = db.ShortCodes.Select(sc => sc.Code).ToArray();
             return View();
         }
 
@@ -51,16 +56,25 @@ namespace MessageSender.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,MessageContent,StartTime,EndTime,Sender,ServiceId")] BatchMessage batchMessage, HttpPostedFileBase contactsFile)
         {
+            if (ModelState.IsValid)
+            {
+                db.BatchMessages.Add(batchMessage);
+            }
+            else
+            {
+                return View(batchMessage);
+            }
+
+            // Display SQL Output during debug sessions
+            db.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+
+            // Disable automatic detection of changes  and validation to efficiently load large files
+            db.Configuration.AutoDetectChangesEnabled = false;
+            db.Configuration.ValidateOnSaveEnabled = false;
+
+            // Send message to contacts on file if available
             if ((contactsFile != null) && (contactsFile.ContentLength > 0) && !string.IsNullOrEmpty(contactsFile.FileName))
             {
-                if (ModelState.IsValid)
-                {
-                    db.BatchMessages.Add(batchMessage);
-                }
-                else
-                {
-                    return View(batchMessage);
-                }
 
                 using (var package = new ExcelPackage(contactsFile.InputStream))
                 {
@@ -83,14 +97,11 @@ namespace MessageSender.Controllers
 
                         phoneColumn = headers.First(h => h.Value.ToString().ToLower().StartsWith("phone")).Address[0].ToString();
 
-                        // Disable automatic detection of changes  and validation to efficiently load large files
-                        db.Configuration.AutoDetectChangesEnabled = false;
-                        db.Configuration.ValidateOnSaveEnabled = false;
 
                         for (int row = 2; row <= numberOfRows; row++)
                         {
                             var phone = worksheet.Cells[phoneColumn + row].Value != null ? worksheet.Cells[phoneColumn + row].Value.ToString() : "";
-                         
+
                             if (!phone.StartsWith("254") || phone.Length != 12)
                             {
                                 continue;
@@ -105,21 +116,47 @@ namespace MessageSender.Controllers
 
                             db.BatchMessageRecipients.Add(recipient);
                         }
-
                     }
-
-                    db.SaveChanges();
-
-                    // Re-enable automatic detection of changes and validation
-                    db.Configuration.AutoDetectChangesEnabled = true;
-                    db.Configuration.ValidateOnSaveEnabled = true;
                 }
 
-                BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
-                return RedirectToAction("Index");
             }
+            else // Pick subscribers from database
+            {
+                var subscribers = db.Subscribers.Where(s => s.isActive && s.ServiceId.Equals(batchMessage.ServiceId)).ToList();
+                var recipients = from r in subscribers
+                                 select new BatchMessageRecipient
+                                 {
+                                     Destination = r.PhoneNumber,
+                                     MessageId = batchMessage.Id,
+                                     Timestamp = DateTime.Now
+                                 };
 
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        db.SaveChanges();
+                        db.BulkInsert(recipients);
+
+                        BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
+
+                        // Re-enable automatic detection of changes and validation
+                        db.Configuration.AutoDetectChangesEnabled = true;
+                        db.Configuration.ValidateOnSaveEnabled = true;
+
+                        transaction.Commit();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                        transaction.Rollback();
+                        return View(batchMessage);
+                    }
+                }
+            }
             return View(batchMessage);
+
         }
 
         // GET: BatchMessages/Edit/5

@@ -53,11 +53,12 @@ namespace MessageSender.Jobs
                     message = batchMessage.MessageContent;
                     sender = batchMessage.Sender;
                     batchId = batchMessage.Id;
+                    serviceId = batchMessage.ServiceId;
                 }
             }
 
             var totalMessages = recipients.Count();
-            var bundleCount = 100;
+            var bundleCount = SMSConfiguration.GetGroupMessageLimit();
             int iterations = (totalMessages / bundleCount) + 1;
             for (int i = 0; i < iterations; i++)
             {

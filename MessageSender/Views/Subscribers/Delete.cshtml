@@ -1,0 +1,72 @@
+﻿@model MessageSender.Models.Subscriber
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Subscriber</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstSubscriptionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstSubscriptionDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastSubscriptionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastSubscriptionDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastUnsubscriptionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastUnsubscriptionDate)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

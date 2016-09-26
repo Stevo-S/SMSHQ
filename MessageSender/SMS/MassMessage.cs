@@ -1,4 +1,5 @@
-﻿using MessageSender.Models;
+﻿using Elmah;
+using MessageSender.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +27,25 @@ namespace MessageSender.SMS
             using (var client = new HttpClient(handler))
             {
                 client.BaseAddress = new Uri(SMSConfiguration.GetRemoteSMSServiceURI());
+                string requestContentString = "";
+                string resultContent = "";
+                do
+                {
+                    try
+                    {
+                        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/SendSmsService/services/SendSms/");
+                        request.Content = new StringContent(buildSMSXML(), Encoding.UTF8, "text/xml");
+                        requestContentString = request.Content.ReadAsStringAsync().Result;
+                        var result = client.SendAsync(request).Result;
+                        resultContent = result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (Exception ex)
+                    {
+                        Elmah.ErrorLog.GetDefault(null).Log(new Error(ex));
+                    }
+                }
+                while (resultContent.Contains("request rate control not pass"));
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/SendSmsService/services/SendSms/");
-                request.Content = new StringContent(buildSMSXML(), Encoding.UTF8, "text/xml");
-                string requestContentString = request.Content.ReadAsStringAsync().Result;
-                var result = client.SendAsync(request).Result;
-                string resultContent = result.Content.ReadAsStringAsync().Result;
 
 
                 //try

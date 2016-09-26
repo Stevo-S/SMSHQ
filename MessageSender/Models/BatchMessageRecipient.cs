@@ -10,6 +10,8 @@ namespace MessageSender.Models
         public int Id { get; set; }
         public string Destination { get; set; }
         public DateTime Timestamp { get; set; }
+        public int MessageId { get; set; }
+
         public virtual BatchMessage Message { get; set; }
     }
 }

@@ -37,5 +37,9 @@ namespace MessageSender.Models
         public DbSet<BatchMessageRecipient> BatchMessageRecipients { get; set; }
         public DbSet<WebRequest> WebRequests { get; set; }
         public DbSet<WebResponse> WebResponses { get; set; }
+        public DbSet<SyncOrder> SyncOrders { get; set; }
+        public DbSet<Subscriber> Subscribers { get; set; }
+        public DbSet<ShortCode> ShortCodes { get; set; }
+        public DbSet<Service> Services { get; set; }
     }
 }

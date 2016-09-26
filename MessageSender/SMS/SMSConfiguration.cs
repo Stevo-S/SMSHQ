@@ -16,6 +16,7 @@ namespace MessageSender.SMS
         private static string HostPPPAddress = ConfigurationManager.AppSettings["ServerPPPIPAddress"];
         private static string RemoteSMSServiceURI = ConfigurationManager.AppSettings["RemoteSMSServiceURI"];
         private static string ServerPublicDomainName = ConfigurationManager.AppSettings["ServerPublicDomainName"];
+        private static string groupMessageLimit = ConfigurationManager.AppSettings["GroupMessageLimit"];
 
         public static readonly Dictionary<string, string> SOAPRequestNamespaces = new Dictionary<string, string>()
         {
@@ -23,6 +24,7 @@ namespace MessageSender.SMS
             { "v2",  "http://www.huawei.com.cn/schema/common/v2_1" },
             { "locSend", "http://www.csapi.org/schema/parlayx/sms/send/v2_2/local" },
             { "locNotification", "http://www.csapi.org/schema/parlayx/sms/notification/v2_2/local" },
+            { "locSync", "http://www.csapi.org/schema/parlayx/data/sync/v1_0/local" },
             { "ns1", "http://www.huawei.com.cn/schema/common/v2_1" },
             { "ns2", "http://www.csapi.org/schema/parlayx/sms/notification/v2_2/local" }
         };
@@ -60,6 +62,28 @@ namespace MessageSender.SMS
         public static string GetHostPPPAddress()
         {
             return HostPPPAddress;
+        }
+
+        // Read the maximum number of recipients per group message
+        // from config file
+        public static int GetGroupMessageLimit()
+        {
+            int minimum = 1;
+            int maximum = 100;
+            int defaultLimit = 100;                                                                                                                                                                                                                                                                                                                                                                                                                      ;
+            int limit;
+            if(Int32.TryParse(groupMessageLimit, out limit))
+            {
+                if (limit < minimum || limit > maximum)
+                {
+                    limit = limit > maximum ? maximum : minimum;
+                }
+            }
+            else
+            {
+                limit = defaultLimit;
+            }
+            return limit;
         }
     }
 }

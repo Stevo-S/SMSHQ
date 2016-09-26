@@ -28,7 +28,7 @@ namespace MessageSender.Controllers
                                     (from el in soapEnvelope.Descendants("address")
                                      select el).First();
             destination = destination.Substring(4);
-            
+
             string deliveryStatus = (string)
                                         (from el in soapEnvelope.Descendants("deliveryStatus")
                                          select el).First();
@@ -40,7 +40,7 @@ namespace MessageSender.Controllers
             string correlatorString = (string)
                                 (from el in soapEnvelope.Descendants(ns2 + "correlator")
                                  select el).First();
-            
+
             string traceUniqueId = (string)
                                         (from el in soapEnvelope.Descendants(ns1 + "traceUniqueID")
                                          select el).First();
@@ -58,10 +58,19 @@ namespace MessageSender.Controllers
                     TraceUniqueId = traceUniqueId
                 };
 
-                
+                // Set subscriber as inactive if delivery notification indicates they are not subscribed
+                if (deliveryStatus.Equals("UserNotSubscribed"))
+                {
+                    var subscriber = db.Subscribers.Where(s => s.PhoneNumber.Equals(destination) && s.ServiceId.Equals(serviceId)).FirstOrDefault();
+                    if (subscriber != null)
+                    {
+                        subscriber.isActive = false;
+                    }
+                }
+
                 db.Deliveries.Add(deliveryNotification);
                 db.SaveChanges();
-                
+
                 return Ok();
             }
         }
