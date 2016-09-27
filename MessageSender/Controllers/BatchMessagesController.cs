@@ -42,11 +42,15 @@ namespace MessageSender.Controllers
         // GET: BatchMessages/Create
         public ActionResult Create()
         {
+            var newBatchMessage = new BatchMessage()
+            {
+                StartTime = DateTime.Now.AddMinutes(2),
+                EndTime = DateTime.Now.AddHours(2)
+            };
             var services = db.Services.Include(s => s.ShortCode);
             ViewBag.Services = db.Services.Select(s => new { Name = s.Name, ServiceId = s.ServiceId }).ToArray();
-            //ViewBag.Services = new SelectList(services, "ServiceId", "Name");
             ViewBag.ShortCodes = db.ShortCodes.Select(sc => sc.Code).ToArray();
-            return View();
+            return View(newBatchMessage);
         }
 
         // POST: BatchMessages/Create
