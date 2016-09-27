@@ -1,13 +1,12 @@
 ﻿$(function () {
-    console.log("Successfully loaded the script 'batchmessage.js'");
-
+    // Load the associated services into a dropdown list on the BatchMessages Create View
+    // when a short code is selected
     function batchMessageViewModel() {
         var self = this;
         self.selectedShortCode = ko.observable();
         self.shortCodes = ko.observableArray(ko.utils.parseJson($('#fromDatabase').attr('data-shortCodes')));
         self.availableServices = ko.utils.parseJson($('#fromDatabase').attr('data-availableServices'));
         self.associatedServices = ko.computed(function () {
-            console.log('updating services dropdown')
             if (self.selectedShortCode()) {
                 var services = ko.utils.arrayFilter(self.availableServices, function (service) {
                     return service.Name.startsWith(self.selectedShortCode());
@@ -22,9 +21,7 @@
             else {
                 return [];
             }
-            //return ['abc', '123'];
         });
-        //this.availableServices = ko.observableArray(ko.utils.parseJson($('#fromDatabase').attr('data-availableServices')));
     };
 
     ko.applyBindings(new batchMessageViewModel());
