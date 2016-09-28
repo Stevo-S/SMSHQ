@@ -26,7 +26,7 @@ namespace MessageSender.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-
+            int minimumInterval = 1;
             // StartTime should be some time in the future
             if (StartTime < DateTime.Now)
             {
@@ -36,10 +36,10 @@ namespace MessageSender.Models
 
             // Expiration date should be greater than SendTime
             TimeSpan interval = EndTime - StartTime;
-            if (interval.Hours < 2)
+            if (interval.Hours < minimumInterval)
             {
                 yield return new
-                    ValidationResult("The expiration should be at least two hours after the send time");
+                    ValidationResult("The expiration should be at least one hour after the send time");
             }
 
         }
