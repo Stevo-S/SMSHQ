@@ -202,33 +202,7 @@ namespace MessageSender.Controllers
             }
             return View(batchMessage);
         }
-
-        // GET: BatchMessages/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BatchMessage batchMessage = db.BatchMessages.Find(id);
-            if (batchMessage == null)
-            {
-                return HttpNotFound();
-            }
-            return View(batchMessage);
-        }
-
-        // POST: BatchMessages/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            BatchMessage batchMessage = db.BatchMessages.Find(id);
-            db.BatchMessages.Remove(batchMessage);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

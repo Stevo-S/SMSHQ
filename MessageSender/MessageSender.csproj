@@ -430,9 +430,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Jobs\Index.cshtml" />
     <Content Include="Views\BatchMessages\Create.cshtml" />
-    <Content Include="Views\BatchMessages\Delete.cshtml" />
-    <Content Include="Views\BatchMessages\Details.cshtml" />
-    <Content Include="Views\BatchMessages\Edit.cshtml" />
     <Content Include="Views\BatchMessages\Index.cshtml" />
     <Content Include="Scripts\jquery-3.1.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.0.min.map" />
