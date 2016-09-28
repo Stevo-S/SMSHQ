@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MessageSender.Models.BatchMessage>
+﻿@model PagedList.IPagedList<MessageSender.Models.BatchMessage>
+@using PagedList.Mvc
 
 @{
     ViewBag.Title = "Index";
@@ -12,13 +13,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.MessageContent)
+            @Html.DisplayNameFor(model => model.First().MessageContent)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartTime)
+            @Html.DisplayNameFor(model => model.First().StartTime)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndTime)
+            @Html.DisplayNameFor(model => model.First().EndTime)
         </th>
         <th></th>
     </tr>
@@ -43,3 +44,13 @@
 }
 
 </table>
+
+<br />
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of (@Model.PageCount)
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+new
+{
+    page
+}))

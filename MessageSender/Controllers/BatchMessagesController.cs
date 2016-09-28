@@ -11,6 +11,7 @@ using OfficeOpenXml;
 using Hangfire;
 using MessageSender.Jobs;
 using EntityFramework.BulkInsert.Extensions;
+using PagedList;
 
 namespace MessageSender.Controllers
 {
@@ -19,9 +20,17 @@ namespace MessageSender.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BatchMessages
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.BatchMessages.ToList());
+            var messages = from m in db.BatchMessages
+                           select m;
+            messages = messages.OrderByDescending(m => m.Id);
+
+            int pageNumber = (page ?? 1);
+            int pageSize = 25;
+            ViewBag.Total = messages.Count();
+
+            return View(messages.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: BatchMessages/Details/5
@@ -141,17 +150,9 @@ namespace MessageSender.Controllers
                     {
                         db.SaveChanges();
                         db.BulkInsert(recipients);
-                        // Send now if StartTime is within two minutes from now
-                        var timeLeft = batchMessage.StartTime - DateTime.Now;
-                        if (timeLeft.Minutes < 2)
-                        {
-                            BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
-                        }
-                        else
-                        {
-                            BackgroundJob.Schedule(() => MessageJobs.SendBatchMessage(batchMessage.Id), timeLeft);
-                        }
-                        
+
+                        BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
+
                         // Re-enable automatic detection of changes and validation
                         db.Configuration.AutoDetectChangesEnabled = true;
                         db.Configuration.ValidateOnSaveEnabled = true;
