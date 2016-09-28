@@ -141,9 +141,17 @@ namespace MessageSender.Controllers
                     {
                         db.SaveChanges();
                         db.BulkInsert(recipients);
-
-                        BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
-
+                        // Send now if StartTime is within two minutes from now
+                        var timeLeft = batchMessage.StartTime - DateTime.Now;
+                        if (timeLeft.Minutes < 2)
+                        {
+                            BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
+                        }
+                        else
+                        {
+                            BackgroundJob.Schedule(() => MessageJobs.SendBatchMessage(batchMessage.Id), timeLeft);
+                        }
+                        
                         // Re-enable automatic detection of changes and validation
                         db.Configuration.AutoDetectChangesEnabled = true;
                         db.Configuration.ValidateOnSaveEnabled = true;
