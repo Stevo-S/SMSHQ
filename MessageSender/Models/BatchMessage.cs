@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -9,11 +10,12 @@ namespace MessageSender.Models
     public class BatchMessage : IValidatableObject
     {
         public int Id { get; set; }
-
+        
         [DataType(DataType.MultilineText)]
         public string MessageContent { get; set; }
-
+        
         public string ServiceId { get; set; }
+
         public string Sender { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
