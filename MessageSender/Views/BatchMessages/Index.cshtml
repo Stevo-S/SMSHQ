@@ -37,10 +37,10 @@
             @Html.DisplayFor(modelItem => item.Sender)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StartTime)
+            @item.StartTime.ToString("dd/mm/yyyy HH:mm:ss")
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EndTime)
+            @item.EndTime.ToString("dd/mm/yyyy HH:mm:ss")
         </td>
         <td>
 
