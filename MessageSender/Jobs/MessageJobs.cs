@@ -33,6 +33,8 @@ namespace MessageSender.Jobs
             hubContext.Clients.All.removeJob(id);
         }
 
+        [DisableConcurrentExecution(3600)]
+        [AutomaticRetry(Attempts = 3)]
         public static void SendBatchMessage(int messageId)
         {
             int id = ++jobCount;
