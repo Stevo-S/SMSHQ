@@ -133,32 +133,7 @@ namespace MessageSender.Controllers
             return View(subscriber);
         }
 
-        // GET: Subscribers/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Subscriber subscriber = db.Subscribers.Find(id);
-            if (subscriber == null)
-            {
-                return HttpNotFound();
-            }
-            return View(subscriber);
-        }
-
-        // POST: Subscribers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Subscriber subscriber = db.Subscribers.Find(id);
-            db.Subscribers.Remove(subscriber);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
+        
         public ActionResult Import()
         {
             return View();
