@@ -24,6 +24,8 @@ namespace MessageSender.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
         public DateTime EndTime { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         public virtual ICollection<BatchMessageRecipient> Recipients { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

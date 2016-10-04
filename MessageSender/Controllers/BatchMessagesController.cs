@@ -71,6 +71,7 @@ namespace MessageSender.Controllers
         {
             if (ModelState.IsValid)
             {
+                batchMessage.CreatedAt = DateTime.Now;
                 db.BatchMessages.Add(batchMessage);
             }
             else

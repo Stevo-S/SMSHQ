@@ -25,7 +25,9 @@
         <th>
             @Html.DisplayNameFor(model => model.First().EndTime)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().CreatedAt)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -43,7 +45,7 @@
             @item.EndTime.ToString("dd/MM/yyyy HH:mm:ss")
         </td>
         <td>
-
+            @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
         </td>
     </tr>
 }
