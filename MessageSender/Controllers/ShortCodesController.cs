@@ -89,31 +89,6 @@ namespace MessageSender.Controllers
             return View(shortCode);
         }
 
-        // GET: ShortCodes/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ShortCode shortCode = db.ShortCodes.Find(id);
-            if (shortCode == null)
-            {
-                return HttpNotFound();
-            }
-            return View(shortCode);
-        }
-
-        // POST: ShortCodes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            ShortCode shortCode = db.ShortCodes.Find(id);
-            db.ShortCodes.Remove(shortCode);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
         protected override void Dispose(bool disposing)
         {

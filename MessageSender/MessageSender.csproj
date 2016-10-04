@@ -443,7 +443,6 @@
     <Content Include="Views\Subscribers\Edit.cshtml" />
     <Content Include="Views\Subscribers\Index.cshtml" />
     <Content Include="Views\ShortCodes\Create.cshtml" />
-    <Content Include="Views\ShortCodes\Delete.cshtml" />
     <Content Include="Views\ShortCodes\Details.cshtml" />
     <Content Include="Views\ShortCodes\Edit.cshtml" />
     <Content Include="Views\ShortCodes\Index.cshtml" />
