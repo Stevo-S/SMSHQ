@@ -438,9 +438,7 @@
     <Content Include="Scripts\jquery-3.1.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.0.min.map" />
     <Content Include="Views\Subscribers\Create.cshtml" />
-    <Content Include="Views\Subscribers\Delete.cshtml" />
     <Content Include="Views\Subscribers\Details.cshtml" />
-    <Content Include="Views\Subscribers\Edit.cshtml" />
     <Content Include="Views\Subscribers\Index.cshtml" />
     <Content Include="Views\ShortCodes\Create.cshtml" />
     <Content Include="Views\ShortCodes\Details.cshtml" />
