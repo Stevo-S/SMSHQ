@@ -448,7 +448,6 @@
     <Content Include="Views\ShortCodes\Edit.cshtml" />
     <Content Include="Views\ShortCodes\Index.cshtml" />
     <Content Include="Views\Services\Create.cshtml" />
-    <Content Include="Views\Services\Delete.cshtml" />
     <Content Include="Views\Services\Details.cshtml" />
     <Content Include="Views\Services\Edit.cshtml" />
     <Content Include="Views\Services\Index.cshtml" />
