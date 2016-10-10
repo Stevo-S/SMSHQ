@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -25,6 +26,7 @@ namespace MessageSender.Models
         [StringLength(128)]
         public string TraceUniqueId { get; set; }
         
+        [Index(name: "IX_Deliveries_Timestamp")]
         public DateTime TimeStamp { get; set; }
     }
 }
