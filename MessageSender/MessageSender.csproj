@@ -255,6 +255,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BatchMessagesController.cs" />
+    <Compile Include="Controllers\DeliveriesController.cs" />
     <Compile Include="Controllers\DeliveryNotificationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobsController.cs" />
@@ -328,6 +329,18 @@
     <Compile Include="Migrations\201610041835007_AddTimestampToBatchMessages.Designer.cs">
       <DependentUpon>201610041835007_AddTimestampToBatchMessages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610101507399_IndexDeliveryTimestamp.cs" />
+    <Compile Include="Migrations\201610101507399_IndexDeliveryTimestamp.Designer.cs">
+      <DependentUpon>201610101507399_IndexDeliveryTimestamp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610101556440_IndexDeliveryStatus.cs" />
+    <Compile Include="Migrations\201610101556440_IndexDeliveryStatus.Designer.cs">
+      <DependentUpon>201610101556440_IndexDeliveryStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610121530216_AddIndexToDeliveryDestinations.cs" />
+    <Compile Include="Migrations\201610121530216_AddIndexToDeliveryDestinations.Designer.cs">
+      <DependentUpon>201610121530216_AddIndexToDeliveryDestinations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BatchMessage.cs" />
@@ -355,6 +368,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\smshq_logo.png" />
+    <Content Include="Content\Images\time_out.jpg" />
     <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -378,6 +392,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jobs.js" />
+    <None Include="Properties\PublishProfiles\SMSHQ-Test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
     <Content Include="Scripts\jquery-3.1.0.min.js" />
@@ -449,6 +464,12 @@
     <Content Include="Views\Services\Edit.cshtml" />
     <Content Include="Views\Services\Index.cshtml" />
     <Content Include="Views\Subscribers\Import.cshtml" />
+    <Content Include="Views\Deliveries\Create.cshtml" />
+    <Content Include="Views\Deliveries\Delete.cshtml" />
+    <Content Include="Views\Deliveries\Details.cshtml" />
+    <Content Include="Views\Deliveries\Edit.cshtml" />
+    <Content Include="Views\Deliveries\Index.cshtml" />
+    <Content Include="Views\Deliveries\TimeoutError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -503,6 +524,18 @@
     <EmbeddedResource Include="Migrations\201610041835007_AddTimestampToBatchMessages.resx">
       <DependentUpon>201610041835007_AddTimestampToBatchMessages.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610101507399_IndexDeliveryTimestamp.resx">
+      <DependentUpon>201610101507399_IndexDeliveryTimestamp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610101556440_IndexDeliveryStatus.resx">
+      <DependentUpon>201610101556440_IndexDeliveryStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610121530216_AddIndexToDeliveryDestinations.resx">
+      <DependentUpon>201610121530216_AddIndexToDeliveryDestinations.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

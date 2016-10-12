@@ -10,6 +10,9 @@ namespace MessageSender.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+
+            // Prevent command timeouts during long-running database migration commands
+            CommandTimeout = Int32.MaxValue;
         }
 
         protected override void Seed(MessageSender.Models.ApplicationDbContext context)

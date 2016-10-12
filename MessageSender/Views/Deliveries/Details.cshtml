@@ -1,0 +1,66 @@
+﻿@model MessageSender.Models.Delivery
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Delivery</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Destination)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Destination)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeliveryStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeliveryStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Correlator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Correlator)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TraceUniqueId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TraceUniqueId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeStamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeStamp)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
