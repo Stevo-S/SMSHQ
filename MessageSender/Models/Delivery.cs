@@ -15,6 +15,7 @@ namespace MessageSender.Models
         public string Destination { get; set; }
         
         [StringLength(64)]
+        [Index(name: "IX_DeliveryStatus")]
         public string DeliveryStatus { get; set; }
 
         [StringLength(32)]
