@@ -1,0 +1,154 @@
+﻿@model MessageSender.Models.SyncOrder
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>SyncOrder</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServicesList)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServicesList)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpiryTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpiryTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderKey)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderKey)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MDSPSUBEXPMODE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MDSPSUBEXPMODE)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjectType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ObjectType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RentSuccess)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RentSuccess)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TraceUniqueId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TraceUniqueId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

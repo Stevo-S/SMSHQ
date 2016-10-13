@@ -246,23 +246,7 @@ namespace MessageSender.Controllers
             // Add Response message to OK status response
             return Ok(responseMessage);
         }
-
-        // DELETE: api/SyncOrders/5
-        [ResponseType(typeof(SyncOrder))]
-        public IHttpActionResult DeleteSyncOrder(int id)
-        {
-            SyncOrder syncOrder = db.SyncOrders.Find(id);
-            if (syncOrder == null)
-            {
-                return NotFound();
-            }
-
-            db.SyncOrders.Remove(syncOrder);
-            db.SaveChanges();
-
-            return Ok(syncOrder);
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

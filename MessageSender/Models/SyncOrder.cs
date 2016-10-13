@@ -30,8 +30,13 @@ namespace MessageSender.Models
         [StringLength(32)]
         public string UpdateDescription { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}")]
         public DateTime UpdateTime { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}")]
         public DateTime EffectiveTime { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}")]
         public DateTime ExpiryTime { get; set; }
 
         [StringLength(64)]

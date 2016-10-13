@@ -1,0 +1,149 @@
+﻿@model PagedList.IPagedList<MessageSender.Models.SyncOrder>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h3>Subscriptions/Unsubscriptions</h3>
+    </div>
+
+    <div class="col-md-3 pull-right">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="lead">Total: &nbsp;  @Model.TotalItemCount.ToString("N0")</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="well">
+    @using (Html.BeginForm("Index", "Subscriptions", FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div class="input-group input-group-sm col-md-2">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-phone"></span>
+            </span>
+            @Html.TextBox("userId", "", new { @placeholder = "Phone Number", @class = "form-control", value = "@ViewBag.userId" })
+        </div>
+
+        <div class="input-group input-group-sm col-md-2">
+            @Html.DropDownListFor(model => model.First().ServiceId, (SelectList)ViewBag.serviceId, "--Select Service ID--", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm col-md-2">
+                            <span class="input-group-addon">
+                                <strong>
+                                    Between
+                                </strong>
+                            </span>
+                            <input type="datetime-local" name="startDate" class="form-control" value="@ViewBag.startDateFilter" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="input-group input-group-sm col-md-2">
+                            <span class="input-group-addon">
+                                <strong>
+                                    &nbsp;&nbsp;&nbsp;&nbsp; and &nbsp;&nbsp;&nbsp;&nbsp;
+                                </strong>
+                            </span>
+                            <input type="datetime-local" name="endDate" class="form-control" value="@ViewBag.endDateFilter" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.DropDownList("updateType", null, new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn btn-info" aria-label="Left Align">
+            Filter
+            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+        </button>
+    }
+</div>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ServiceId)
+        </th>
+        <th>
+            @Html.DisplayName("Description")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().UpdateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().EffectiveTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ExpiryTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Timestamp)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdateDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EffectiveTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExpiryTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Timestamp)
+        </td>
+        <td>
+        </td>
+    </tr>
+}
+
+</table>
+
+<br />
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page,
+    destination = ViewBag.userIdFilter,
+    startDate = ViewBag.startDateFilter,
+    endDate = ViewBag.endDateFilter,
+    deliveryStatus = ViewBag.deliveryStatusFilter
+}))
