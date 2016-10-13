@@ -1,0 +1,29 @@
+﻿/* 
+    Long messages in tables should be clipped and have trailing ellipses
+    This rule assumes that the class is applied to td elements that are
+    part of one column in the table. It should not be applied to multiple columns. 
+*/
+.messageColumn {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 632px;
+}
+
+
+/* 
+    Members of the class "handHover" 
+    have the cursor over them changed to "pointer"
+*/
+.handHover {
+    cursor: pointer;
+}
+
+.hasLeftBorder {
+    border-left: 1px solid lightgray;
+}
+
+.hasRightBorder {
+    border-right: 1px gray;
+}

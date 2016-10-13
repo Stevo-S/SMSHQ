@@ -36,8 +36,14 @@ namespace MessageSender
                        "~/Scripts/jquery.signalR-{version}.js"));
 
             // Custom scripts
-            bundles.Add(new ScriptBundle("~/bundles/custom").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jobs").Include(
                        "~/Scripts/jobs.js"));
+            bundles.Add(new ScriptBundle("~/bundles/toggleCellContent")
+                    .Include("~/Scripts/toggleCellContent.js"));
+
+            // custom stylesheet
+            bundles.Add(new StyleBundle("~/Content/customcss").Include("~/Content/custom.css"));
+
         }
     }
 }
