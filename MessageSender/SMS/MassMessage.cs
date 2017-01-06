@@ -112,7 +112,7 @@ namespace MessageSender.SMS
                     new XElement(soapenv + "Body",
                         new XElement(loc + "sendSms",
                             //new XElement(loc + "addresses", "tel:" + Destination),
-                            from destination in Destinations select new XElement(loc + "addresses", "tel:" + destination),
+                            from destination in Destinations.Distinct() select new XElement(loc + "addresses", "tel:" + destination),
                             new XElement(loc + "senderName", Sender),
                             new XElement(loc + "message", Text),
                             new XElement(loc + "receiptRequest",

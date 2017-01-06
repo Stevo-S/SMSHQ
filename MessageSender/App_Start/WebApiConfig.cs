@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Elmah.Contrib.WebApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
 
 namespace MessageSender
 {
@@ -16,6 +18,10 @@ namespace MessageSender
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+
+            // enable elmah
+            GlobalConfiguration.Configuration.Filters.Add(new ElmahHandleErrorApiAttribute());
         }
     }
 }

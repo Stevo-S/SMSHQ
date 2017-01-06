@@ -29,6 +29,26 @@ namespace MessageSender.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            // Add default subscription welcome messages for pre-existing services
+            // without any subscription welcome message
+            foreach (var service in context.Services.ToList())
+            {
+                if (!service.SubscriptionWelcomeMessages.Any())
+                {
+                    var welcomeMessage = new Models.SubscriptionWelcomeMessage
+                    {
+                        MessageText = "Welcome to " + service.Name + ".",
+                        Service = service,
+                        StartTime = "00:00:00",
+                        EndTime = "23:59:59",
+                        Priority = 1,
+                        StartDate = DateTime.Now
+                    };
+                    context.SubscriptionWelcomeMessages.Add(welcomeMessage);
+                }
+            }
+            
         }
     }
 }

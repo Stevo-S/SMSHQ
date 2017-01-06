@@ -6,43 +6,49 @@
 
 <h2>Details</h2>
 
-<div>
+<div class="container">
     <h4>Service</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+    <div class="col-md-5">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ServiceId)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.ServiceId)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ServiceId)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.ServiceId)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.SmsNotificationCorrelator)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.SmsNotificationCorrelator)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.SmsNotificationCorrelator)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.SmsNotificationCorrelator)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.SmsNotificationCriteria)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.SmsNotificationCriteria)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.SmsNotificationCriteria)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.SmsNotificationCriteria)
+            </dd>
 
-    </dl>
+        </dl>
+    </div>
+
+    <div class="col-md-6">
+        @{ Html.RenderPartial("_SubscriptionWelcomeMessages", Model.SubscriptionWelcomeMessages); }
+    </div>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

@@ -81,5 +81,29 @@ namespace MessageSender.Jobs
 
             hubContext.Clients.All.removeJob(id);
         }
+
+        
+        public static void SendSubscriptionWelcomeMessage(int outboundMessageId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var message = db.OutboundMessages.Find(outboundMessageId);
+
+                if (message != null)
+                {
+                    var subscriptionResponse = new SMSMessage
+                    {
+                        Correlator = message.Id.ToString("D12"),
+                        Destination = message.Destination,
+                        Sender = message.Sender,
+                        ServiceId = message.ServiceId,
+                        Text = message.Text
+                    };
+
+                    subscriptionResponse.Send();
+                }
+            }
+        }
     }
+
 }

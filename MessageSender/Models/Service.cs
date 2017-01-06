@@ -26,6 +26,25 @@ namespace MessageSender.Models
 
         public int ShortCodeId { get; set; }
 
-        public virtual ShortCode ShortCode { get; set; }
+        public virtual ShortCode ShortCode { get; set; }    
+
+        public virtual ICollection<SubscriptionWelcomeMessage> SubscriptionWelcomeMessages { get; set; }
+
+        public string GetSubscriptionWelcomeMessage()
+        {
+            var welcomeMessage = this.SubscriptionWelcomeMessages
+                .Where(swm => swm.StartDate < DateTime.Now 
+                    && TimeSpan.Parse(swm.StartTime) < DateTime.Now.TimeOfDay
+                    && TimeSpan.Parse(swm.EndTime) > DateTime.Now.TimeOfDay
+                    && ((swm.EndDate > DateTime.Now) || (swm.EndDate == null))) 
+                .OrderByDescending(swm => swm.Priority).FirstOrDefault();
+            
+            if (welcomeMessage == null)
+            {
+                welcomeMessage = this.SubscriptionWelcomeMessages.Where(swm => swm.Priority == SubscriptionWelcomeMessage.DefaultPriority).FirstOrDefault();
+            }
+
+            return welcomeMessage.MessageText;
+        }
     }
 }
