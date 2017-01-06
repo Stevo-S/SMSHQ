@@ -11,6 +11,8 @@ using System.Web.Http.Description;
 using MessageSender.Models;
 using System.Xml.Linq;
 using MessageSender.SMS;
+using Hangfire;
+using MessageSender.Jobs;
 
 namespace MessageSender.Controllers
 {
@@ -224,6 +226,39 @@ namespace MessageSender.Controllers
             {
                 subscriber.isActive = true;
                 subscriber.LastSubscriptionDate = DateTime.Now;
+                var service = db.Services.Where(s => s.ServiceId.Equals(syncOrder.ServiceId)).Include(s => s.ShortCode).FirstOrDefault();
+                if (service != null)
+                {
+                    //var subscriptionResponse = new SMSMessage
+                    //{
+                    //    Correlator = "S" + DateTime.Now.ToString("yyyymmddHHMMss"),
+                    //    Destination = subscriber.PhoneNumber,
+                    //    Sender = service.ShortCode.Code,
+                    //    ServiceId = syncOrder.ServiceId,
+                    //    Text = service.GetSubscriptionWelcomeMessage()
+                    //};
+
+                    //subscriptionResponse.Send();
+
+                    var outboundMessage = new OutboundMessage
+                    {
+                        Destination = subscriber.PhoneNumber,
+                        ServiceId = syncOrder.ServiceId,
+                        Text = service.GetSubscriptionWelcomeMessage(),
+                        Sender = service.ShortCode.Code,
+                        Timestamp = DateTime.Now
+                    };
+
+                    db.OutboundMessages.Add(outboundMessage);
+                    db.SaveChanges();
+                    // Wait the specified number of seconds in order to send Subscription welcome message
+                    // This so as to allow enough time for the provider to register the sender as subscribed
+                    // once this controller action returns the result
+                    int secondsToWait = 2;
+                    BackgroundJob.Schedule(() => MessageJobs.SendSubscriptionWelcomeMessage(outboundMessage.Id), 
+                        DateTime.Now.AddSeconds(secondsToWait));
+                }
+
             }
             else if (syncOrder.UpdateDescription.Equals("Deletion"))
             {
@@ -233,20 +268,43 @@ namespace MessageSender.Controllers
 
             db.SaveChanges();
 
-            string responseMessage = "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:loc='http://www.csapi.org/schema/parlayx/data/sync/v1_0/local'>"
-                               + "<soapenv:Header/>"
-                                + "<soapenv:Body>"
-                                    + "<loc:syncOrderRelationResponse>"
-                                        + "< loc:result>0</loc:result>"
-                                        + "<loc:resultDescription>OK</loc:resultDescription>"
-                                    + "</loc:syncOrderRelationResponse>"
-                                + "</soapenv:Body>"
-                                + "</soapenv:Envelope>";
+            //string responseMessage = "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:loc='http://www.csapi.org/schema/parlayx/data/sync/v1_0/local'>"
+            //                   + "<soapenv:Header/>"
+            //                    + "<soapenv:Body>"
+            //                        + "<loc:syncOrderRelationResponse>"
+            //                            + "< loc:result>0</loc:result>"
+            //                            + "<loc:resultDescription>OK</loc:resultDescription>"
+            //                        + "</loc:syncOrderRelationResponse>"
+            //                    + "</soapenv:Body>"
+            //                    + "</soapenv:Envelope>";
 
             // Add Response message to OK status response
-            return Ok(responseMessage);
+            //return Ok(responseMessage);
+            return Ok(SyncOrderResponse());
         }
-        
+
+        // SyncOrderRespose
+        private XElement SyncOrderResponse()
+        {
+            XNamespace soapenv = SMSConfiguration.SOAPRequestNamespaces["soapenv"];
+            XNamespace loc = SMSConfiguration.SOAPRequestNamespaces["locSync"];
+
+            XElement soapEnvelope =
+                new XElement(soapenv + "Envelope",
+                    new XAttribute(XNamespace.Xmlns + "soapenv", soapenv.NamespaceName),
+                    new XAttribute(XNamespace.Xmlns + "loc", loc.NamespaceName),
+                    new XElement(soapenv + "Header"), // End of Header
+                    new XElement(soapenv + "Body",
+                        new XElement(loc + "syncOrderRelationResponse",
+                            new XElement(loc + "result", 0),
+                            new XElement(loc + "resultDescription", "OK")
+                        ) // End of syncOrderRelationResponse
+                    ) // End of Soap Body
+                ); // End of Soap Envelope
+
+            return soapEnvelope;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

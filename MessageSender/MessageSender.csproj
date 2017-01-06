@@ -52,6 +52,10 @@
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Elmah.Contrib.WebApi, Version=1.0.10.25, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elmah.Contrib.WebApi.1.0.10.25\lib\net45\Elmah.Contrib.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
       <Private>True</Private>
@@ -264,6 +268,7 @@
     <Compile Include="Controllers\ShortCodesController.cs" />
     <Compile Include="Controllers\SubscribersController.cs" />
     <Compile Include="Controllers\SubscriptionsController.cs" />
+    <Compile Include="Controllers\SubscriptionWelcomeMessagesController.cs" />
     <Compile Include="Controllers\SyncOrdersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -342,6 +347,14 @@
     <Compile Include="Migrations\201610121530216_AddIndexToDeliveryDestinations.Designer.cs">
       <DependentUpon>201610121530216_AddIndexToDeliveryDestinations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610221948470_AddSubscriptionWelcomeMessages.cs" />
+    <Compile Include="Migrations\201610221948470_AddSubscriptionWelcomeMessages.Designer.cs">
+      <DependentUpon>201610221948470_AddSubscriptionWelcomeMessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611242002005_AddOutboundMessage.cs" />
+    <Compile Include="Migrations\201611242002005_AddOutboundMessage.Designer.cs">
+      <DependentUpon>201611242002005_AddOutboundMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BatchMessage.cs" />
@@ -350,10 +363,12 @@
     <Compile Include="Models\ExpressMessage.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OutboundMessage.cs" />
     <Compile Include="Models\ScheduledMessage.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\ShortCode.cs" />
     <Compile Include="Models\Subscriber.cs" />
+    <Compile Include="Models\SubscriptionWelcomeMessage.cs" />
     <Compile Include="Models\SyncOrder.cs" />
     <Compile Include="Models\WebRequest.cs" />
     <Compile Include="Models\WebResponse.cs" />
@@ -475,6 +490,12 @@
     <Content Include="Views\Deliveries\TimeoutError.cshtml" />
     <Content Include="Views\Subscriptions\Details.cshtml" />
     <Content Include="Views\Subscriptions\Index.cshtml" />
+    <Content Include="Views\Services\_SubscriptionWelcomeMessages.cshtml" />
+    <Content Include="Views\SubscriptionWelcomeMessages\Create.cshtml" />
+    <Content Include="Views\SubscriptionWelcomeMessages\Delete.cshtml" />
+    <Content Include="Views\SubscriptionWelcomeMessages\Details.cshtml" />
+    <Content Include="Views\SubscriptionWelcomeMessages\Edit.cshtml" />
+    <Content Include="Views\SubscriptionWelcomeMessages\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -537,6 +558,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610121530216_AddIndexToDeliveryDestinations.resx">
       <DependentUpon>201610121530216_AddIndexToDeliveryDestinations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610221948470_AddSubscriptionWelcomeMessages.resx">
+      <DependentUpon>201610221948470_AddSubscriptionWelcomeMessages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611242002005_AddOutboundMessage.resx">
+      <DependentUpon>201611242002005_AddOutboundMessage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

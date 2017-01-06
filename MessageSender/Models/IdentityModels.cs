@@ -41,5 +41,7 @@ namespace MessageSender.Models
         public DbSet<Subscriber> Subscribers { get; set; }
         public DbSet<ShortCode> ShortCodes { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<SubscriptionWelcomeMessage> SubscriptionWelcomeMessages { get; set; }
+        public DbSet<OutboundMessage> OutboundMessages { get; set; }
     }
 }

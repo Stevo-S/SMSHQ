@@ -58,7 +58,7 @@ namespace MessageSender.Controllers
             };
             var services = db.Services.Include(s => s.ShortCode);
             ViewBag.Services = db.Services.Select(s => new { Name = s.Name, ServiceId = s.ServiceId }).ToArray();
-            ViewBag.ShortCodes = db.ShortCodes.Select(sc => sc.Code).ToArray();
+            ViewBag.ShortCodes = db.ShortCodes.Where(sc => sc.Activated).Select(sc => sc.Code).ToArray();
             return View(newBatchMessage);
         }
 
