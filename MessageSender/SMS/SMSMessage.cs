@@ -58,7 +58,7 @@ namespace MessageSender.SMS
                             new XElement(loc + "senderName", Sender),
                             new XElement(loc + "message", Text),
                             new XElement(loc + "receiptRequest",
-                                new XElement("endpoint", "http://" + SMSConfiguration.GetHostPPPAddress() + "/MessageSender/SMSService/ReceiveDeliveryNotification"),
+                                new XElement("endpoint", "http://" + SMSConfiguration.GetHostPPPAddress() + "/SMSHQ/Deliveries/Receive"),
                                 new XElement("interfaceName", "SmsNotification"),
                                 new XElement("correlator", Correlator)
                             ) // End of receiptRequest

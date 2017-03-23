@@ -143,7 +143,8 @@ namespace MessageSender.Controllers
             IEnumerable<XElement> extensionInfo = from el in soapEnvelope.Descendants("key")
                                                   select el;
 
-            string transactionId = "", objectTypestring = "", traceUniqueId = "", rentSuccess = "", orderKey = "", mdspSubExpModeString = "";
+            string transactionId = "", objectTypestring = "", traceUniqueId = "", 
+                rentSuccess = "", orderKey = "", mdspSubExpModeString = "", keyword = "";
 
             foreach (var el in extensionInfo)
             {
@@ -175,6 +176,10 @@ namespace MessageSender.Controllers
                         rentSuccess = (el.NextNode as XElement).Value;
                         break;
 
+                    case "keyword":
+                        keyword = (el.NextNode as XElement).Value;
+                        break;
+
                     default:
                         break;
                 }
@@ -191,6 +196,7 @@ namespace MessageSender.Controllers
                 UserType = userType,
                 EffectiveTime = DateTime.ParseExact(effectiveTime, "yyyyMMddHHmmss", null),
                 ExpiryTime = DateTime.ParseExact(effectiveTime, "yyyyMMddHHmmss", null),
+                Keyword = keyword,
                 MDSPSUBEXPMODE = mdspSubExpMode,
                 ObjectType = objectType,
                 OrderKey = orderKey,
@@ -217,7 +223,8 @@ namespace MessageSender.Controllers
                     PhoneNumber = syncOrder.UserId,
                     ServiceId = syncOrder.ServiceId,
                     FirstSubscriptionDate = DateTime.Now,
-                    LastSubscriptionDate = DateTime.Now
+                    LastSubscriptionDate = DateTime.Now,
+                    ProductId = syncOrder.ProductId
                 };
                 db.Subscribers.Add(subscriber);
             }

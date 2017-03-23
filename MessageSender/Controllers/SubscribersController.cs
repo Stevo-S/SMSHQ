@@ -11,6 +11,9 @@ using OfficeOpenXml;
 using PagedList;
 using EntityFramework.BulkInsert.Extensions;
 using System.IO;
+using System.Threading;
+using MessageSender.SMS;
+using System.Xml.Linq;
 
 namespace MessageSender.Controllers
 {
@@ -244,6 +247,72 @@ namespace MessageSender.Controllers
 
             return View();
 
+        }
+
+        public ActionResult Deactivate(int id)
+        {
+            var subscriber = db.Subscribers.Find(id);
+            if (subscriber != null)
+            {
+                var deactivationResult = DeactivateFromSP(subscriber);
+                ViewBag.DeactivationAlert = BuildAlertHtml(deactivationResult);
+
+                db.Entry(subscriber).Reload();
+                return PartialView("_SubscriberRow", subscriber);
+            }
+            return new EmptyResult();
+        }
+
+        private string BuildAlertHtml(string deactivationResult)
+        {
+            var alertDiv = new TagBuilder("div");
+            alertDiv.AddCssClass("alert");
+            alertDiv.AddCssClass("alert-dismissible");
+            if (deactivationResult.Contains("Success"))
+            {
+                alertDiv.AddCssClass("alert-success");
+            }
+            else
+            {
+                alertDiv.AddCssClass("alert-danger");
+            }
+            alertDiv.MergeAttribute("role", "alert");
+
+            var closeButton = new TagBuilder("button");
+            closeButton.AddCssClass("close");
+            closeButton.MergeAttribute("type", "button");
+            closeButton.MergeAttribute("data-dismiss", "alert");
+            closeButton.MergeAttribute("aria-label", "Close");
+
+            var closeIcon = new TagBuilder("span");
+            closeIcon.MergeAttribute("aria-hidden", "true");
+            closeIcon.InnerHtml = "&times;";
+
+            string alertMessage = "";
+
+            if (deactivationResult.Contains("resultDescription"))
+            {
+                XElement rawResult = XElement.Parse(deactivationResult);
+                alertMessage = (string)
+                                    (from el in rawResult.Descendants("resultDescription")
+                                     select el).First();
+            }
+            else
+            {
+                alertMessage = deactivationResult;
+            }
+
+            closeButton.InnerHtml = closeIcon.ToString();
+            alertDiv.InnerHtml = closeButton.ToString() + alertMessage;
+
+            return alertDiv.ToString();
+        }
+
+        private string DeactivateFromSP(Subscriber subscriber)
+        {
+            var unsubscriptionRequest = new DeactivationRequest(subscriber);
+
+            return unsubscriptionRequest.Send();
         }
 
         protected override void Dispose(bool disposing)

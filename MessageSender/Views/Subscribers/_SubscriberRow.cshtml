@@ -1,0 +1,39 @@
+﻿@model  MessageSender.Models.Subscriber
+
+<td>
+    @Html.DisplayFor(modelItem => Model.PhoneNumber)
+</td>
+<td>
+    @Html.DisplayFor(modelItem => Model.ServiceId)
+</td>
+<td>
+    @Html.DisplayFor(modelItem => Model.ProductId)
+</td>
+<td>
+    @Html.DisplayFor(modelItem => Model.isActive)
+</td>
+<td>
+    @Html.DisplayFor(modelItem => Model.FirstSubscriptionDate)
+</td>
+<td>
+    @Html.DisplayFor(modelItem => Model.LastSubscriptionDate)
+</td>
+<td>
+    @Html.DisplayFor(modelItem => Model.LastUnsubscriptionDate)
+</td>
+<td data-content="@ViewBag.DeactivationAlert">
+    @Ajax.ActionLink("Deactivate",
+                        "Deactivate",
+                        new { id = Model.Id },
+                        new AjaxOptions
+                        {
+                            HttpMethod = "get",
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = Model.Id.ToString(),
+                            OnBegin = "$('#" + Model.Id.ToString() + "').fadeToggle('fast', 'swing'); $('#waitMessage').modal('show');",
+                            OnComplete = " $('#waitMessage').modal('hide');$('#" + Model.Id.ToString() + "').fadeToggle(1000, 'linear'); $('#deactivationResponses').prepend($('#" + @Model.Id.ToString() + " td:last').attr('data-content'));"
+                        },
+                        new { @class = "btn btn-danger btn-sm " + (Model.isActive ? "active" : "disabled").ToString() }
+                    )
+
+    

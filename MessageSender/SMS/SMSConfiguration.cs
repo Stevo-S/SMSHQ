@@ -25,8 +25,10 @@ namespace MessageSender.SMS
             { "locSend", "http://www.csapi.org/schema/parlayx/sms/send/v2_2/local" },
             { "locNotification", "http://www.csapi.org/schema/parlayx/sms/notification/v2_2/local" },
             { "locSync", "http://www.csapi.org/schema/parlayx/data/sync/v1_0/local" },
+            { "locSubscribe", "http://www.csapi.org/schema/parlayx/subscribe/manage/v1_0/localo"},
             { "ns1", "http://www.huawei.com.cn/schema/common/v2_1" },
-            { "ns2", "http://www.csapi.org/schema/parlayx/sms/notification/v2_2/local" }
+            { "ns2", "http://www.csapi.org/schema/parlayx/sms/notification/v2_2/local" },
+            { "tns", "http://www.huawei.com.cn/schema/common/v2_1" }
         };
 
         public static string GetUsername()

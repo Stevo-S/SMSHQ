@@ -16,6 +16,9 @@ namespace MessageSender.Models
         [StringLength(16)]
         public string ServiceId { get; set; }
 
+        [StringLength(16)]
+        public string ProductId { get; set; }
+
         public bool isActive { get; set; }
 
         public DateTime FirstSubscriptionDate { get; set; }
