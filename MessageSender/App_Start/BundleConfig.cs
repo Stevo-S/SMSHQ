@@ -44,6 +44,10 @@ namespace MessageSender
             // custom stylesheet
             bundles.Add(new StyleBundle("~/Content/customcss").Include("~/Content/custom.css"));
 
+            // Unobtrusive AJAX
+            bundles.Add(new ScriptBundle("~/bundles/uajax").
+                Include("~/Scripts/jquery.unobtrusive-ajax*"));
+
         }
     }
 }

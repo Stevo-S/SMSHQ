@@ -48,6 +48,7 @@ namespace MessageSender.Models
         public int MDSPSUBEXPMODE { get; set; }
         public int ObjectType { get; set; }
         public bool RentSuccess { get; set; }
+        public string Keyword { get; set; }
 
         [StringLength(64)]
         public string TraceUniqueId { get; set; }
