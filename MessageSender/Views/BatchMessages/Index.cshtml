@@ -52,6 +52,9 @@
         <th>
             @Html.DisplayNameFor(model => model.First().CreatedAt)
         </th>
+        <th>
+
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -70,6 +73,12 @@
         </td>
         <td>
             @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
+        </td>
+        <td>
+            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-info @(item.StartTime < DateTime.Now ? "disabled" : "active") ">
+<span class="glyphicon glyphicon-edit"></span>
+                Edit
+            </a>
         </td>
     </tr>
 }

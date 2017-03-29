@@ -1,0 +1,87 @@
+﻿@model MessageSender.Models.BatchMessage
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>BatchMessage</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MessageContent, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.MessageContent, new { htmlAttributes = new { @class = "form-control", rows = "8", required = "true", data_bind = "textInput: messageContent" } })
+                @Html.ValidationMessageFor(model => model.MessageContent, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-5">
+                <p class="text-info"><strong>Number of SMSs: <span data-bind="text: smsCount" class="badge"></span></strong></p>
+                <p class="text-info"><strong>Characters left: <span data-bind="text: charactersLeft" class="badge"></span></strong></p>
+                <textarea hidden id="MessageContentCopy">@Model.MessageContent</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ServiceId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ServiceId, new { htmlAttributes = new { @class = "form-control", @readonly="true" } })
+                @Html.ValidationMessageFor(model => model.ServiceId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sender, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Sender, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.Sender, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control", @readonly = "true", type = "datetime-local" } })
+                @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control", @readonly = "true", type = "datetime-local" } })
+                @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreatedAt, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CreatedAt, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.CreatedAt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/batchmessage.js")
+}

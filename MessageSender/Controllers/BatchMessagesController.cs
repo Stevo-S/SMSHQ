@@ -203,14 +203,17 @@ namespace MessageSender.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,MessageContent,StartTime,EndTime")] BatchMessage batchMessage)
+        public ActionResult Edit([Bind(Include = "Id,MessageContent,ServiceId,Sender,StartTime,EndTime,CreatedAt")] BatchMessage batchMessage)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && batchMessage.StartTime > DateTime.Now)
             {
                 db.Entry(batchMessage).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            var ErrorMessages = new List<string>() { };
+            ErrorMessages.Add("Sorry you can't edit this message because it has already been sent!");
+            ViewBag.ErrorNotifications = ErrorMessages;
             return View(batchMessage);
         }
 
