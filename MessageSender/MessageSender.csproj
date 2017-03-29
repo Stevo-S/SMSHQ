@@ -510,6 +510,7 @@
     <Content Include="Views\SubscriptionWelcomeMessages\Index.cshtml" />
     <Content Include="Views\Subscribers\_SubscriberRow.cshtml" />
     <Content Include="Views\Shared\_PleaseWait.cshtml" />
+    <Content Include="Views\BatchMessages\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
