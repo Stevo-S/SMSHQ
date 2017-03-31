@@ -5,7 +5,21 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <h3>Subscribers</h3>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="lead">Total: &nbsp;  @Model.TotalItemCount.ToString("N0")</span>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <div class="well">
     @using (Html.BeginForm("Index", "Subscribers", FormMethod.Get, new { @class = "form-inline" }))
