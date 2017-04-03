@@ -34,6 +34,48 @@
     </a>
 </p>
 
+<div class="well">
+
+    @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div class="input-group input-group-sm col-md-2">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-phone"></span>
+            </span>
+            @Html.TextBox("sender", "", new { placeholder = "Sender", @class = "form-control", value = "@ViewBag.SenderFilter" })
+        </div>
+        <div class="input-group input-group-sm col-md-2">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-envelope"></span>
+            </span>
+            <input type="text" name="messageText" class="form-control" placeholder="SMS containing..." value="@ViewBag.MessageFilter" />
+        </div>
+        <div class="input-group input-group-sm col-md-2">
+            <span class="input-group-addon">
+                Between
+            </span>
+            <input type="datetime-local" name="startDate" class="form-control" value="@ViewBag.StartDateFilter" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+        <div class="input-group input-group-sm col-md-2">
+            <span class="input-group-addon">
+                and
+            </span>
+            <input type="datetime-local" name="endDate" class="form-control" value="@ViewBag.EndDateFilter" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" aria-label="Filter">
+            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+            Filter
+        </button>
+    }
+</div>
+
 <table class="table table-striped">
     <tr>
         <th>
@@ -57,31 +99,32 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td class="messageColumn">
-            @Html.DisplayFor(modelItem => item.MessageContent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sender)
-        </td>
-        <td>
-            @item.StartTime.ToString("dd/MM/yyyy HH:mm:ss")
-        </td>
-        <td>
-            @item.EndTime.ToString("dd/MM/yyyy HH:mm:ss")
-        </td>
-        <td>
-            @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
-        </td>
-        <td>
-            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-info @(item.StartTime < DateTime.Now ? "disabled" : "active") ">
-<span class="glyphicon glyphicon-edit"></span>
-                Edit
-            </a>
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="messageColumn">
+                @Html.DisplayFor(modelItem => item.MessageContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sender)
+            </td>
+            <td>
+                @item.StartTime.ToString("dd/MM/yyyy HH:mm:ss")
+            </td>
+            <td>
+                @item.EndTime.ToString("dd/MM/yyyy HH:mm:ss")
+            </td>
+            <td>
+                @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-info @(item.StartTime < DateTime.Now ? "disabled" : "active") ">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    Edit
+                </a>
+            </td>
+        </tr>
+    }
 
 </table>
 
@@ -92,7 +135,11 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of (@Model.Pag
 @Html.PagedListPager(Model, page => Url.Action("Index",
 new
 {
-    page
+    page,
+    sender = ViewBag.SenderFilter,
+    messageText = ViewBag.MessageFilter,
+    startDate = ViewBag.StartDateFilter,
+    endDate = ViewBag.EndDateFilter
 }))
 
 
