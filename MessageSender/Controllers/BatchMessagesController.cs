@@ -20,11 +20,37 @@ namespace MessageSender.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BatchMessages
-        public ActionResult Index(int? page)
+        public ActionResult Index(String sender, String messageText, DateTime? startDate, DateTime? endDate, int? page)
         {
             var messages = from m in db.BatchMessages
                            select m;
             messages = messages.OrderByDescending(m => m.Id);
+
+            // Filter by sender
+            if (!String.IsNullOrEmpty(sender))
+            {
+                messages = messages.Where(m => m.Sender.Contains(sender));
+                ViewBag.SenderFilter = sender;
+            }
+
+            // Filter by message context
+            if (!String.IsNullOrEmpty(messageText))
+            {
+                messages = messages.Where(m => m.MessageContent.Contains(messageText));
+                ViewBag.MessageFilter = messageText;
+            }
+
+            // Filter by startTime
+            if (startDate != null)
+            {
+                if (endDate < startDate || endDate == null)
+                {
+                    endDate = DateTime.Now;
+                }
+                messages = messages.Where(m => m.StartTime > startDate && m.StartTime < endDate);
+                ViewBag.StartDateFilter = startDate.Value.ToString("s");
+                ViewBag.EndDateFilter = endDate.Value.ToString("s");
+            }
 
             int pageNumber = (page ?? 1);
             int pageSize = 25;
