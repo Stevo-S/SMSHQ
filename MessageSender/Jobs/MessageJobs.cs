@@ -51,7 +51,22 @@ namespace MessageSender.Jobs
 
                 if (batchMessage != null)
                 {
-                    recipients = batchMessage.Recipients.ToList();
+                    // if recipients were uploaded using spreadsheet file
+                    if (batchMessage.Recipients.Any())
+                    {
+                        recipients = batchMessage.Recipients.ToList();
+                    }
+                    else // recipients already existed in the database as subscribers
+                    {
+                        var subscribers = db.Subscribers.Where(s => s.isActive && s.ServiceId.Equals(batchMessage.ServiceId)).ToList();
+                        recipients = (from r in subscribers
+                                         select new BatchMessageRecipient
+                                         {
+                                             Destination = r.PhoneNumber,
+                                             MessageId = batchMessage.Id,
+                                             Timestamp = DateTime.Now
+                                         }).ToList();
+                    }
                     message = batchMessage.MessageContent;
                     sender = batchMessage.Sender;
                     batchId = batchMessage.Id;

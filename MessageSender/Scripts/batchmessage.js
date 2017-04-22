@@ -48,7 +48,17 @@
             var leftCount = numberOfCharactersPerSms - (self.characterCount() % numberOfCharactersPerSms);
             return (leftCount == numberOfCharactersPerSms) && (self.characterCount() > 0) ? 0 : leftCount;
         });
+    
+        // Toggle between chained and individual batch message options
+        self.chainedMessage = ko.observable('true');
     };
 
+
     ko.applyBindings(new batchMessageViewModel());
+
+    // Group services by short codes in chained message select input
+    $.each($('#Sender option'), function () {
+        var shortCode = this.text;
+        $("#ServiceIds option:contains('" + shortCode + "')").wrapAll("<optgroup label='" + shortCode + "'></optgroup>");
+    });
 });

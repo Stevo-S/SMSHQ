@@ -26,7 +26,7 @@ namespace MessageSender.Models
 
         public int ShortCodeId { get; set; }
 
-        public virtual ShortCode ShortCode { get; set; }    
+        public virtual ShortCode ShortCode { get; set; }
 
         public virtual ICollection<SubscriptionWelcomeMessage> SubscriptionWelcomeMessages { get; set; }
 
