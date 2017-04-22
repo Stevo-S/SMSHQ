@@ -83,7 +83,7 @@ namespace MessageSender.Controllers
                 EndTime = DateTime.Now.AddHours(2)
             };
             var services = db.Services.Include(s => s.ShortCode);
-            ViewBag.Services = db.Services.Select(s => new { Name = s.Name, ServiceId = s.ServiceId }).ToArray();
+            ViewBag.Services = db.Services.Where(s => s.ShortCode.Activated).Select(s => new { Name = s.Name, ServiceId = s.ServiceId }).ToArray();
             ViewBag.ShortCodes = db.ShortCodes.Where(sc => sc.Activated).Select(sc => sc.Code).ToArray();
             return View(newBatchMessage);
         }
@@ -93,12 +93,52 @@ namespace MessageSender.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,MessageContent,StartTime,EndTime,Sender,ServiceId")] BatchMessage batchMessage, HttpPostedFileBase contactsFile)
+        public ActionResult Create([Bind(Include = "Id,MessageContent,StartTime,EndTime,Sender,ServiceId")] BatchMessage batchMessage, string[] ServiceIds, HttpPostedFileBase contactsFile)
         {
+            var timeLeft = batchMessage.StartTime - DateTime.Now;
+
+            // If it is a chained batch message
+            if (ServiceIds != null && ServiceIds.Any())
+            {
+                var selectedServices = db.Services.Where(s => ServiceIds.Contains(s.ServiceId)).Include(s => s.ShortCode).ToList();
+                string parentJobId = "";
+                var currentTime = DateTime.Now;
+                foreach (var service in selectedServices)
+                {
+                    var bm = new BatchMessage
+                    {
+                        MessageContent = batchMessage.MessageContent,
+                        StartTime = batchMessage.StartTime,
+                        EndTime = batchMessage.EndTime,
+                        Sender = service.ShortCode.Code,
+                        ServiceId = service.ServiceId,
+                        CreatedAt = currentTime
+                    };
+
+                    db.BatchMessages.Add(bm);
+                    db.SaveChanges();
+                    if (!String.IsNullOrEmpty(parentJobId))
+                    {
+                        // If this is not the first job in the batch, chain current job to already scheduled job
+                        parentJobId = BackgroundJob.ContinueWith(parentJobId, () => MessageJobs.SendBatchMessage(bm.Id));
+                    }
+                    else
+                    {
+                        // This is the first job in this batch, schedule it then
+                        parentJobId = BackgroundJob.Schedule(() => MessageJobs.SendBatchMessage(bm.Id), timeLeft);
+                    }
+
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            // Then if it is an individual message
             if (ModelState.IsValid)
             {
                 batchMessage.CreatedAt = DateTime.Now;
                 db.BatchMessages.Add(batchMessage);
+                db.SaveChanges();
             }
             else
             {
@@ -160,50 +200,26 @@ namespace MessageSender.Controllers
                 }
 
             }
-            else // Pick subscribers from database
+            else // Subscribers will be picked from database when the job runs
             {
-                var subscribers = db.Subscribers.Where(s => s.isActive && s.ServiceId.Equals(batchMessage.ServiceId)).ToList();
-                var recipients = from r in subscribers
-                                 select new BatchMessageRecipient
-                                 {
-                                     Destination = r.PhoneNumber,
-                                     MessageId = batchMessage.Id,
-                                     Timestamp = DateTime.Now
-                                 };
 
-                using (var transaction = db.Database.BeginTransaction())
+                // Send now if StartTime is within two minutes from now
+                if (timeLeft.Minutes < 2)
                 {
-                    try
-                    {
-                        db.SaveChanges();
-                        db.BulkInsert(recipients);
-
-                        // Send now if StartTime is within two minutes from now
-                        var timeLeft = batchMessage.StartTime - DateTime.Now;
-                        if (timeLeft.Minutes < 2)
-                        {
-                            BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
-                        }
-                        else
-                        {
-                            BackgroundJob.Schedule(() => MessageJobs.SendBatchMessage(batchMessage.Id), timeLeft);
-                        }
-
-
-                        // Re-enable automatic detection of changes and validation
-                        db.Configuration.AutoDetectChangesEnabled = true;
-                        db.Configuration.ValidateOnSaveEnabled = true;
-
-                        transaction.Commit();
-                        return RedirectToAction("Index");
-                    }
-                    catch (Exception ex)
-                    {
-                        Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                        transaction.Rollback();
-                        return View(batchMessage);
-                    }
+                    BackgroundJob.Enqueue(() => MessageJobs.SendBatchMessage(batchMessage.Id));
                 }
+                else
+                {
+                    BackgroundJob.Schedule(() => MessageJobs.SendBatchMessage(batchMessage.Id), timeLeft);
+                }
+
+
+                // Re-enable automatic detection of changes and validation
+                db.Configuration.AutoDetectChangesEnabled = true;
+                db.Configuration.ValidateOnSaveEnabled = true;
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(batchMessage);
 
