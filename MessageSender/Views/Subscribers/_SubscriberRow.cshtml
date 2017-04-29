@@ -1,7 +1,11 @@
-﻿@model  MessageSender.Models.Subscriber
+﻿@using MessageSender.CustomHelpers
+@model  MessageSender.Models.Subscriber
 
 <td>
     @Html.DisplayFor(modelItem => Model.PhoneNumber)
+</td>
+<td>
+    @Html.ShortCodeFromServiceId(Model.ServiceId)
 </td>
 <td>
     @Html.DisplayFor(modelItem => Model.ServiceId)
