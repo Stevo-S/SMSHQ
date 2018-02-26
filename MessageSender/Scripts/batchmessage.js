@@ -51,6 +51,11 @@
     
         // Toggle between chained and individual batch message options
         self.chainedMessage = ko.observable('true');
+
+        // Select all services for chained messages
+        selectAllServices = function() {
+            $('#ServiceIds option').prop('selected', true);
+        }
     };
 
 

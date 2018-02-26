@@ -20,10 +20,12 @@
     <div class="form-horizontal">
         <h4>BatchMessage</h4>
         <hr />
-        <div>
+        <div>   
             <div class="form-group col-md-12">
                 <label class="radio-inline"><input type="radio" name="ChainedMessage" value="true" data-bind="checked: chainedMessage"><strong>Chained Message</strong></label>
                 <label class="radio-inline"><input type="radio" name="ChainedMessage" value="false" data-bind="checked: chainedMessage"><strong>Individual Message</strong></label>
+                &nbsp;
+                <button type ="button" class="btn btn-sm btn-primary" data-bind="click: selectAllServices">Select All</button>
             </div>
         </div>
 
