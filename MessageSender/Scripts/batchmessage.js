@@ -32,7 +32,7 @@
         // if they still need the same message from before
         var numberOfCharactersPerSms = 160;
         var previousMessage = $('#MessageContentCopy').val();
-        previousMessage = previousMessage == null ? '' : previousMessage;
+        previousMessage = previousMessage === null ? '' : previousMessage;
         console.log('Message: ' + previousMessage);
         self.messageContent = ko.observable(previousMessage);
         self.characterCount = ko.computed(function () {
@@ -42,15 +42,20 @@
         });
         self.smsCount = ko.computed(function () {
             var count = Math.ceil(self.characterCount() / numberOfCharactersPerSms);
-            return isNaN(count) || count == 0 ? 1 : count;
+            return isNaN(count) || count === 0 ? 1 : count;
         });
         self.charactersLeft = ko.computed(function () {
             var leftCount = numberOfCharactersPerSms - (self.characterCount() % numberOfCharactersPerSms);
-            return (leftCount == numberOfCharactersPerSms) && (self.characterCount() > 0) ? 0 : leftCount;
+            return (leftCount === numberOfCharactersPerSms) && (self.characterCount() > 0) ? 0 : leftCount;
         });
     
         // Toggle between chained and individual batch message options
         self.chainedMessage = ko.observable('true');
+
+        // Select all services for chained batch messages
+        selectAllServices = function() {
+            $('#ServiceIds option').prop('selected', true);
+        }
     };
 
 
