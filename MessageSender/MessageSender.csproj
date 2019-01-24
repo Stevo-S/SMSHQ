@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -285,6 +286,7 @@
     </Compile>
     <Compile Include="Hubs\JobsHub.cs" />
     <Compile Include="Jobs\MessageJobs.cs" />
+    <Compile Include="Jobs\SubscriptionJobs.cs" />
     <Compile Include="Migrations\201607271244095_InitialMigration.cs" />
     <Compile Include="Migrations\201607271244095_InitialMigration.Designer.cs">
       <DependentUpon>201607271244095_InitialMigration.cs</DependentUpon>

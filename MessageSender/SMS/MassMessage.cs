@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Xml.Linq;
 
@@ -31,6 +32,31 @@ namespace MessageSender.SMS
                 string resultContent = "";
                 do
                 {
+                    // Log rate exceeded error responses
+                    if (!String.IsNullOrEmpty(resultContent))
+                    {
+                        using (var db = new ApplicationDbContext())
+                        {
+                            var webRequest = new Models.WebRequest()
+                            {
+                                Body = requestContentString,
+                                Timestamp = DateTime.Now
+                            };
+                            db.WebRequests.Add(webRequest);
+
+                            var webResponse = new Models.WebResponse()
+                            {
+                                Body = resultContent + "\n" + String.Join(", ", Destinations),
+                                Timestamp = DateTime.Now
+                            };
+                            db.WebResponses.Add(webResponse);
+
+                            db.SaveChanges();
+                        }
+                        // Wait a minute before retrying 
+                        Thread.Sleep(1000);
+                    }
+
                     try
                     {
                         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/SendSmsService/services/SendSms/");
