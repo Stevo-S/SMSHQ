@@ -30,9 +30,12 @@ namespace MessageSender.SMS
                 client.BaseAddress = new Uri(SMSConfiguration.GetRemoteSMSServiceURI());
                 string requestContentString = "";
                 string resultContent = "";
+                DateTime requestedAt = DateTime.Now;
+                DateTime respondedAt = DateTime.Now;
+
                 do
                 {
-                    // Log rate exceeded error responses
+                    // Log TPS-rate-exceeded error responses
                     if (!String.IsNullOrEmpty(resultContent))
                     {
                         using (var db = new ApplicationDbContext())
@@ -40,14 +43,14 @@ namespace MessageSender.SMS
                             var webRequest = new Models.WebRequest()
                             {
                                 Body = requestContentString,
-                                Timestamp = DateTime.Now
+                                Timestamp = requestedAt
                             };
                             db.WebRequests.Add(webRequest);
 
                             var webResponse = new Models.WebResponse()
                             {
                                 Body = resultContent + "\n" + String.Join(", ", Destinations),
-                                Timestamp = DateTime.Now
+                                Timestamp = respondedAt
                             };
                             db.WebResponses.Add(webResponse);
 
@@ -60,10 +63,12 @@ namespace MessageSender.SMS
                     try
                     {
                         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/SendSmsService/services/SendSms/");
+                        requestedAt = DateTime.Now;
                         request.Content = new StringContent(buildSMSXML(), Encoding.UTF8, "text/xml");
                         requestContentString = request.Content.ReadAsStringAsync().Result;
                         var result = client.SendAsync(request).Result;
                         resultContent = result.Content.ReadAsStringAsync().Result;
+                        respondedAt = DateTime.Now;
                     }
                     catch (Exception ex)
                     {
@@ -90,7 +95,7 @@ namespace MessageSender.SMS
                     var webRequest = new Models.WebRequest()
                     {
                         Body = requestContentString,
-                        Timestamp = DateTime.Now
+                        Timestamp = requestedAt
                     };
                     db.WebRequests.Add(webRequest);
 
